@@ -18,6 +18,6 @@ import { UserSchemaModule } from './schema';
 })
 export class DatabaseModule {
   constructor() {
-    console.log('process.env', process.env.DATABASE);
+    console.log('DatabaseModule', process.env.DATABASE);
   }
 }
