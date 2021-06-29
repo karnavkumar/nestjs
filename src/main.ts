@@ -1,19 +1,19 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as helmet from 'helmet';
 import * as morgan from 'morgan';
 import { ValidationPipe } from '@nestjs/common';
+import { AllExceptionsFilter } from './all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bodyParser: true,
   });
-  app.useGlobalPipes(new ValidationPipe());
+  app.use(helmet());
   app.use(morgan('dev'));
   app.setGlobalPrefix('api');
-  app.use(helmet());
   app.enableCors();
   const config = new DocumentBuilder()
     .setTitle(`${process.env.DATABASE || 'NestJS'} API`)
@@ -24,7 +24,9 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
+  app.useGlobalPipes(new ValidationPipe());
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   await app.listen(process.env.NODE_PORT || 6868);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
