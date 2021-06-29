@@ -36,3 +36,8 @@ lerna-debug.log*
 
 # Environments
 .env
+
+
+# global locks
+yarn.lock
+package-lock.json
