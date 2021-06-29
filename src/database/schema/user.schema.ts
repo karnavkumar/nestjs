@@ -12,9 +12,11 @@ export class User {
   username: string;
 
   @Prop({
+    trim: true,
+    lowercase: true,
     validate: [validateEmail, 'Please fill a valid email address'],
     unique: true,
-    required: true,
+    required: [true, 'Email address required.'],
   })
   email: string;
 

@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SignUpUserDto {
-  @ApiProperty({ required: true })
+  @ApiProperty()
   username: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty()
   email: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty()
   password: string;
 
-  @ApiProperty({ type: 'string', format: 'binary' })
-  file: any;
+  @ApiProperty({ required: false, type: 'string', format: 'binary' })
+  picture: any;
 }
