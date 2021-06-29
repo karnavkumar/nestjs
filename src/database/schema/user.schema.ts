@@ -12,10 +12,9 @@ export class User {
   username: string;
 
   @Prop({
-    lowercase: true,
-    required: [true, "can't be blank"],
-    createIndexes: true,
+    validate: [validateEmail, 'Please fill a valid email address'],
     unique: true,
+    required: true,
   })
   email: string;
 
@@ -30,6 +29,11 @@ export class User {
 
   @Prop()
   breed: string;
+}
+
+function validateEmail(email: string) {
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(email);
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
