@@ -1,10 +1,13 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
 
 export type UserDocument = User & Document;
 
 @Schema({ timestamps: true })
 export class User {
+  @Prop({ type: Types.ObjectId })
+  _id: string;
+
   @Prop()
   name: string;
 
@@ -12,6 +15,7 @@ export class User {
   username: string;
 
   @Prop({
+    index: true,
     trim: true,
     lowercase: true,
     validate: [validateEmail, 'Please fill a valid email address'],
@@ -31,6 +35,15 @@ export class User {
 
   @Prop()
   breed: string;
+
+  @Prop({ type: Types.ObjectId })
+  country: string;
+
+  @Prop()
+  mobile: number;
+
+  @Prop({ default: false })
+  is_deleted: boolean;
 }
 
 function validateEmail(email: string) {
