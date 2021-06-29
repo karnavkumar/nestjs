@@ -9,7 +9,7 @@ import {
 
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { SignUpUserDto } from './dto/signup-user.dto';
+import { SignUpUserDto } from '../../dto/signup-user.dto';
 import { ApiConsumes } from '@nestjs/swagger';
 @Controller('/users')
 export class UserController {
