@@ -6,10 +6,11 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+
 import { UserService } from './user.service';
-// import { User, UserDocument } from '../../database/schema/user.schema';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { SignUpUserDto } from './dto/signup-user.dto';
+import { ApiConsumes } from '@nestjs/swagger';
 @Controller('/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -20,10 +21,16 @@ export class UserController {
   }
 
   @Post('signup')
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
-  async create(@Body() signUpUserDto: SignUpUserDto) {
+  @UseInterceptors(FileInterceptor('picture'))
+  @ApiConsumes('multipart/form-data')
+  async create(
+    @Body() signUpUserDto: SignUpUserDto,
+    @UploadedFile() picture: Express.Multer.File
+  ) {
+    console.log('here', picture);
+
     try {
-      await this.userService.create(signUpUserDto);
+      await this.userService.create(signUpUserDto, picture);
     } catch (error) {
       return error.message;
     }

@@ -9,8 +9,8 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>
   ) {}
 
-  async create({ username, email, password }): Promise<User> {
-    console.log('body', { username, email, password });
+  async create({ username, email, password }, file): Promise<User> {
+    console.log('body', { username, email, password }, file);
     const createdCat = new this.userModel();
     createdCat.set({ username, email, password });
     return createdCat.save();
