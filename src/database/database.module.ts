@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchemaModule } from './schema';
+
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -13,7 +13,6 @@ import { UserSchemaModule } from './schema';
         useNewUrlParser: true,
       }),
     }),
-    UserSchemaModule,
   ],
 })
 export class DatabaseModule {
