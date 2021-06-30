@@ -11,6 +11,7 @@ import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SignUpUserDto } from '../../dto/signup-user.dto';
 import { ApiConsumes } from '@nestjs/swagger';
+import { Public } from 'src/auth/is-public.decorator';
 @Controller('/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -20,6 +21,7 @@ export class UserController {
     return 'Hello from users';
   }
 
+  @Public()
   @Post('signup')
   @UseInterceptors(FileInterceptor('picture'))
   @ApiConsumes('multipart/form-data')
