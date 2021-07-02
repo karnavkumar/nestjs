@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as express from 'express';
 import * as helmet from 'helmet';
 import * as morgan from 'morgan';
 import { AllExceptionsFilter } from './all-exceptions.filter';
@@ -13,6 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bodyParser: true,
   });
+  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
   app.use(helmet());
   app.use(morgan('dev'));
   app.setGlobalPrefix('api');
@@ -26,7 +28,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
   app.useGlobalPipes(new ValidationPipe());
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
